@@ -108,7 +108,7 @@ function Cart({ cart, deleteFromCart, confirmOrder, totalPrice }) {
       {cart.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-4 gap-4">
           <img
-            src="../public/images/illustration-empty-cart.svg"
+            src="/images/illustration-empty-cart.svg"
             alt="Chocolate cake"
           />
           <p className="text-sm text-rose-500 font-semibold">
@@ -165,7 +165,7 @@ function Cart({ cart, deleteFromCart, confirmOrder, totalPrice }) {
           </div>
           <div className="flex justify-center items-center gap-2 bg-rose-50 rounded-lg p-4 my-6">
             <img
-              src="../public/images/icon-carbon-neutral.svg"
+              src="/images/icon-carbon-neutral.svg"
               alt="Green tree icon"
             />
             <p>
@@ -194,7 +194,7 @@ function ConfirmOrderModal({ cart, totalPrice, startNewOrder }) {
       <div className="w-full md:w-xl py-10 px-6 md:px-10 rounded-t-xl md:rounded-xl flex flex-col gap-8 bg-white">
         <div>
           <img
-            src="../public/images/icon-order-confirmed.svg"
+            src="/images/icon-order-confirmed.svg"
             alt="Green checkmark"
             className="mb-6"
           />
