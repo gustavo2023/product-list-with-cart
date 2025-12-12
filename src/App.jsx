@@ -99,11 +99,7 @@ function DessertCard({ dessert, cartQuantity, addToCart, removeFromCart }) {
   );
 }
 
-function Cart({ cart, deleteFromCart, confirmOrder }) {
-  const totalPrice = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+function Cart({ cart, deleteFromCart, confirmOrder, totalPrice }) {
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
   return (
@@ -137,7 +133,7 @@ function Cart({ cart, deleteFromCart, confirmOrder }) {
                       <span className="font-semibold text-red">
                         {item.quantity}x
                       </span>
-                      <span className="text-rose-500">@${item.price}</span>
+                      <span className="text-rose-500">@ ${item.price}</span>
                       <span className="font-semibold text-rose-500">
                         ${item.quantity * item.price}
                       </span>
@@ -174,7 +170,11 @@ function Cart({ cart, deleteFromCart, confirmOrder }) {
               alt="Green tree icon"
             />
             <p>
-              This is a <strong>carbon-neutral</strong> delivery
+              This is a{" "}
+              <span className="text-rose-900 font-semibold">
+                carbon-neutral
+              </span>{" "}
+              delivery
             </p>
           </div>
           <button
@@ -189,8 +189,84 @@ function Cart({ cart, deleteFromCart, confirmOrder }) {
   );
 }
 
+function ConfirmOrderModal({ cart, totalPrice, startNewOrder }) {
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center">
+      <div className="w-full md:w-xl py-10 px-6 md:px-10 rounded-t-xl md:rounded-xl flex flex-col gap-8 bg-white">
+        <div>
+          <img
+            src="../public/images/icon-order-confirmed.svg"
+            alt="Green checkmark"
+            className="mb-6"
+          />
+          <h2 className="mb-2 text-[2.5rem] text-rose-900 font-bold leading-12">
+            Order Confirmed
+          </h2>
+          <p className="text-rose-500">We hope you enjoy your food!</p>
+        </div>
+
+        <div className="bg-rose-50 rounded-lg p-6">
+          <ul className="flex flex-col gap-4 mb-6">
+            {cart.map((item) => {
+              return (
+                <li
+                  key={item.id}
+                  className="flex justify-between items-center border-b border-rose-100 pb-4"
+                >
+                  <div className="flex gap-4 items-center">
+                    <img
+                      src={item.image.thumbnail}
+                      alt={item.name}
+                      className="rounded-sm w-12 h-12"
+                    />
+
+                    <div className="flex flex-col gap-4">
+                      <p className="text-sm text-rose-900 font-semibold">
+                        {item.name}
+                      </p>
+
+                      <div className="flex gap-4 text-sm">
+                        <span className="text-red font-semibold">
+                          x{item.quantity}
+                        </span>
+                        <span className="text-rose-500">@ ${item.price}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <span className="text-rose-900 font-semibold">
+                    ${item.quantity * item.price}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="flex justify-between text-rose-900">
+            <p className="text-sm">Order Total</p>
+            <span className="text-2xl font-bold">${totalPrice.toFixed(2)}</span>
+          </div>
+        </div>
+
+        <button
+          onClick={() => startNewOrder()}
+          className="cursor-pointer bg-red text-white font-semibold w-full rounded-[62rem] py-4 px-6 hover:bg-[#952C0B] transition-colors ease-in"
+        >
+          Start New Order
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [cart, setCart] = useState([]);
+  const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
+
+  const totalPrice = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
   const addToCart = (dessert) => {
     setCart((prevCart) => {
@@ -226,31 +302,56 @@ function App() {
     setCart((prevCart) => prevCart.filter((item) => item.id !== dessert.id));
   };
 
-  return (
-    <div className="font-redhat bg-rose-50 grid grid-cols-1 lg:grid-col-2 gap-8 py-12 px-6">
-      <main className="flex flex-col gap-8">
-        <h1 className="text-[2.5rem] font-bold leading-12">Desserts</h1>
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {data.map((dessert) => {
-            const cartItem = cart.find((item) => item.id === dessert.id);
-            const cartQuantity = cartItem ? cartItem.quantity : 0;
+  const confirmOrder = () => {
+    setIsOrderConfirmed(true);
+  };
 
-            return (
-              <li key={dessert.id}>
-                <DessertCard
-                  dessert={dessert}
-                  cartQuantity={cartQuantity}
-                  addToCart={addToCart}
-                  removeFromCart={removeFromCart}
-                />
-              </li>
-            );
-          })}
-        </ul>
-      </main>
-      <aside>
-        <Cart cart={cart} deleteFromCart={deleteFromCart} />
-      </aside>
+  const startNewOrder = () => {
+    setCart([]);
+    setIsOrderConfirmed(false);
+    window.scrollTo(0, 0);
+  };
+
+  return (
+    <div className="font-redhat bg-rose-50 relative min-h-screen">
+      <div className="grid grid-cols-1 lg:grid-col-2 gap-8 py-12 px-6">
+        <main className="flex flex-col gap-8">
+          <h1 className="text-[2.5rem] font-bold leading-12">Desserts</h1>
+          <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {data.map((dessert) => {
+              const cartItem = cart.find((item) => item.id === dessert.id);
+              const cartQuantity = cartItem ? cartItem.quantity : 0;
+
+              return (
+                <li key={dessert.id}>
+                  <DessertCard
+                    dessert={dessert}
+                    cartQuantity={cartQuantity}
+                    addToCart={addToCart}
+                    removeFromCart={removeFromCart}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </main>
+        <aside>
+          <Cart
+            cart={cart}
+            deleteFromCart={deleteFromCart}
+            confirmOrder={confirmOrder}
+            totalPrice={totalPrice}
+          />
+        </aside>
+      </div>
+
+      {isOrderConfirmed && (
+        <ConfirmOrderModal
+          cart={cart}
+          totalPrice={totalPrice}
+          startNewOrder={startNewOrder}
+        />
+      )}
     </div>
   );
 }
