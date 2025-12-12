@@ -99,6 +99,96 @@ function DessertCard({ dessert, cartQuantity, addToCart, removeFromCart }) {
   );
 }
 
+function Cart({ cart, deleteFromCart, confirmOrder }) {
+  const totalPrice = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
+  return (
+    <div className="p-6 bg-white rounded-xl flex flex-col gap-6">
+      <h2 className="text-2xl text-red font-bold">Your Cart ({totalItems})</h2>
+
+      {cart.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-4 gap-4">
+          <img
+            src="../public/images/illustration-empty-cart.svg"
+            alt="Chocolate cake"
+          />
+          <p className="text-sm text-rose-500 font-semibold">
+            Your added items will appear here
+          </p>
+        </div>
+      ) : (
+        <div>
+          <ul>
+            {cart.map((item) => {
+              return (
+                <li
+                  key={item.id}
+                  className="pb-4 border-b border-rose-100 mb-4 flex justify-between items-center"
+                >
+                  <div className="flex flex-col gap-2">
+                    <h3 className="text-sm font-semibold text-rose-900">
+                      {item.name}
+                    </h3>
+                    <div className="flex gap-2 items-center text-sm">
+                      <span className="font-semibold text-red">
+                        {item.quantity}x
+                      </span>
+                      <span className="text-rose-500">@${item.price}</span>
+                      <span className="font-semibold text-rose-500">
+                        ${item.quantity * item.price}
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => deleteFromCart(item)}
+                    className="border rounded-full p-1 border-rose-400 text-rose-400 hover:border-rose-900 hover:text-rose-900 transition-colors ease-in"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="10"
+                      fill="none"
+                      viewBox="0 0 10 10"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M8.375 9.375 5 6 1.625 9.375l-1-1L4 5 .625 1.625l1-1L5 4 8.375.625l1 1L6 5l3.375 3.375-1 1Z"
+                      />
+                    </svg>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          <div className="mt-6 flex justify-between items-center">
+            <p className="text-sm text-rose-900">Order Total</p>
+            <span className="text-2xl font-bold">${totalPrice.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-center items-center gap-2 bg-rose-50 rounded-lg p-4 my-6">
+            <img
+              src="../public/images/icon-carbon-neutral.svg"
+              alt="Green tree icon"
+            />
+            <p>
+              This is a <strong>carbon-neutral</strong> delivery
+            </p>
+          </div>
+          <button
+            onClick={() => confirmOrder()}
+            className="cursor-pointer bg-red text-white font-semibold w-full rounded-[62rem] py-4 px-6 hover:bg-[#952C0B] transition-colors ease-in"
+          >
+            Confirm Order
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const [cart, setCart] = useState([]);
 
@@ -133,7 +223,7 @@ function App() {
   };
 
   return (
-    <div className="font-redhat grid grid-cols-1 lg:grid-col-2 gap-8 py-12 px-6">
+    <div className="font-redhat bg-rose-50 grid grid-cols-1 lg:grid-col-2 gap-8 py-12 px-6">
       <main className="flex flex-col gap-8">
         <h1 className="text-[2.5rem] font-bold leading-12">Desserts</h1>
         <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -154,6 +244,9 @@ function App() {
           })}
         </ul>
       </main>
+      <aside>
+        <Cart cart={cart} />
+      </aside>
     </div>
   );
 }
