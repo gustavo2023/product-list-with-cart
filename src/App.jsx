@@ -133,8 +133,8 @@ function App() {
   };
 
   return (
-    <div className="font-redhat">
-      <main>
+    <div className="font-redhat grid grid-cols-1 lg:grid-col-2 gap-8 py-12 px-6">
+      <main className="flex flex-col gap-8">
         <h1 className="text-[2.5rem] font-bold leading-12">Desserts</h1>
         <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {data.map((dessert) => {
