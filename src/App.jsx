@@ -222,6 +222,10 @@ function App() {
     });
   };
 
+  const deleteFromCart = (dessert) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== dessert.id));
+  };
+
   return (
     <div className="font-redhat bg-rose-50 grid grid-cols-1 lg:grid-col-2 gap-8 py-12 px-6">
       <main className="flex flex-col gap-8">
@@ -245,7 +249,7 @@ function App() {
         </ul>
       </main>
       <aside>
-        <Cart cart={cart} />
+        <Cart cart={cart} deleteFromCart={deleteFromCart} />
       </aside>
     </div>
   );
