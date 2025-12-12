@@ -1,6 +1,5 @@
 import { useState } from "react";
 import data from "../data.json";
-import "./App.css";
 
 function DessertCard({ dessert, cartQuantity, addToCart, removeFromCart }) {
   return (
