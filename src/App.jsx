@@ -18,7 +18,11 @@ function DessertCard({ dessert, cartQuantity, addToCart, removeFromCart }) {
               media="(min-width: 1024px)"
             />
             <source srcSet={dessert.image.tablet} media="(min-width: 768px)" />
-            <img src={dessert.image.mobile} alt={dessert.name} className="w-full" />
+            <img
+              src={dessert.image.mobile}
+              alt={dessert.name}
+              className="w-full"
+            />
           </picture>
         </div>
         <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2">
