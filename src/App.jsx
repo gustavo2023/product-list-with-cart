@@ -32,7 +32,7 @@ function DessertCard({ dessert, cartQuantity, addToCart, removeFromCart }) {
               className="border-rose-400 border-[1.5px] rounded-[62rem] px-7 md:px-5 py-3 md:w-40 flex items-center gap-2 bg-white text-rose-900 font-semibold cursor-pointer hover:border-red hover:text-red transition-colors ease-in whitespace-nowrap"
             >
               <span>
-                <img src="/images/icon-add-to-cart.svg" alt="Add to Cart" />
+                <img src="/images/icon-add-to-cart.svg" alt="Shopping cart icon" />
               </span>
               <span>Add to Cart</span>
             </button>
